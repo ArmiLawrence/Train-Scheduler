@@ -1,5 +1,8 @@
-//ISSUE LOG 
+//ISSUE LOG
+////  All basic requirements of the train homework are fulfilled. Extra challenges like adding the buttons that perform updates are not working. ////
 //2019-01-12 Able to add Delete buttons in the table, however unable to actually perform the deletion. Is the "on.click" broken?
+//2019-01-13 Able to add Edit buttons in the table, however, similar to issue from yesterday, it does not really render any activity. It cannot even do an Alert.
+//              I believe that althought I am able to make buttons, my buttons aren't able to make the proper calls to the database.
 
 $(document).ready(function (){
 
@@ -94,7 +97,7 @@ $(document).ready(function (){
         var nextTrain = moment().add(tMinutesTillTrain, "minutes");
 
         // Logs everything to console
-        console.log(firstTimeConverted);
+        //console.log(firstTimeConverted);
         console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm"));
         console.log("DIFFERENCE IN TIME: " + diffTime);
         console.log(tRemainder);
@@ -102,7 +105,7 @@ $(document).ready(function (){
         console.log("ARRIVAL TIME: " + moment(nextTrain).format("MMM DD YYYY, hh:mm a"));
 
 
-        // CREATE BUTTONS
+        // CREATE BUTTONS FOR DELETION
         // (this is necessary otherwise you will have repeat buttons)
         $("#buttons-view").empty();
 
@@ -116,12 +119,31 @@ $(document).ready(function (){
         // Add the key as a data-attribute
         a.attr("data-name", id)
         // Providing the initial button text
-        a.text("Delete");
+        a.text("Delete " + destination);
         // Adding the button to the buttons-view div
         $("#buttons-view").append(a);
 
-        //are the buttons doing what they're supposed to do? console log it.
+        // CREATE BUTTONS FOR EDIT
+        // (this is necessary otherwise you will have repeat buttons)
+        $("#buttons-view2").empty();
+
+        // Then dynamically generating buttons for each train in the database
+        // This code $("<button>") is all jQuery needs to create the beginning and end tag. (<button></button>)
+        var b = $("<button>");
+        // Adding a class of update to our record
+        b.addClass("updateTrain");
+        // Adding the bootstrap button
+        b.addClass("btn btn-primary");
+        // Add the key as a data-attribute
+        b.attr("data-name", id)
+        // Providing the initial button text
+        b.text("Edit " + destination);
+        // Adding the button to the buttons-view div
+        $("#buttons-view2").append(b);
+
+        //are the buttons doing what they're supposed to do?
         console.log(a);
+        console.log(b);
 
 
         // Append the newly created table data to the table row
@@ -133,11 +155,48 @@ $(document).ready(function (){
                 $("<td>").text(frequency),
                 $("<td>").text(moment(nextTrain).format("MMM DD YYYY, hh:mm a")),
                 $("<td>").text(tMinutesTillTrain),
-                $("<td>").html(a)  
+                $("<td>").append(a),
+                $("<td>").append(b)
         );
 
         // Append the table row to the table body
         $("#train-table > tbody").append(tRow);
+
+
+
+        // This function handles events where one button is clicked
+        // This is not working.
+        $("#buttons-view").on("click", function(event) {
+
+            event.preventDefault();
+
+            alert("Delete!");
+
+            var deleteStuff = database.ref(id)
+            deleteStuff.remove();
+
+        });
+
+
+        // This function handles events where one button is clicked
+        // This is not working.
+        $("#buttons-view2").on("click", function(event) {
+
+            event.preventDefault();
+
+            alert("Editing " + trainName);
+
+            // YOUR TASK!!!
+            // Code in the logic for storing and retrieving the most recent user.
+            
+            // Retrieve new posts as they are added to our database
+            database.ref("train").on("child_added", function(snapshot) {
+                var newPost = snapshot.val();
+                console.log("Train Name to Edit " + newPost.trainName);
+            });
+            
+
+        });
 
 
     // Handle the errors
@@ -146,15 +205,5 @@ $(document).ready(function (){
 
     });
 
-
-    // This function handles events where one button is clicked
-    // This is not working.
-    $("#buttons-view").on("click", function(event) {
-
-        event.preventDefault();
-
-        database.ref().remove();
-
-    });
-
 });
+
