@@ -1,8 +1,6 @@
 //ISSUE LOG
 ////  All basic requirements of the train homework are fulfilled. Extra challenges like adding the buttons that perform updates are not working. ////
-//2019-01-12 Able to add Delete buttons in the table, however unable to actually perform the deletion. Is the "on.click" broken?
-//2019-01-13 Able to add Edit buttons in the table, however, similar to issue from yesterday, it does not really render any activity. It cannot even do an Alert.
-//              I believe that althought I am able to make buttons, my buttons aren't able to make the proper calls to the database.
+//2019-01-15 Able to add Delete button. However, if you click the top record, it deletes the top record and every subsequent records below, not necessarily just the record I want to delete.
 
 $(document).ready(function (){
 
@@ -64,16 +62,16 @@ $(document).ready(function (){
 
     //3. Show stuff
     // Firebase watcher + initial loader HINT: .on("value")
-    database.ref().on("child_added", function(childSnapshot, Key) {
+    database.ref().on("child_added", function(childSnapshot) {
 
         // Log everything that's coming out of snapshot
         console.log(childSnapshot.val());
-
+        
         var trainName = childSnapshot.val().train;
         var destination = childSnapshot.val().trainDestination;
         var firstTrainTime = childSnapshot.val().trainTime;
         var frequency = childSnapshot.val().trainFrequency;
-        var id = Key;
+        var id = childSnapshot.key;
 
         console.log(trainName);
         console.log(destination);
@@ -123,28 +121,9 @@ $(document).ready(function (){
         // Adding the button to the buttons-view div
         $("#buttons-view").append(a);
 
-        // CREATE BUTTONS FOR EDIT
-        // (this is necessary otherwise you will have repeat buttons)
-        $("#buttons-view2").empty();
-
-        // Then dynamically generating buttons for each train in the database
-        // This code $("<button>") is all jQuery needs to create the beginning and end tag. (<button></button>)
-        var b = $("<button>");
-        // Adding a class of update to our record
-        b.addClass("updateTrain");
-        // Adding the bootstrap button
-        b.addClass("btn btn-primary");
-        // Add the key as a data-attribute
-        b.attr("data-name", id)
-        // Providing the initial button text
-        b.text("Edit " + destination);
-        // Adding the button to the buttons-view div
-        $("#buttons-view2").append(b);
 
         //are the buttons doing what they're supposed to do?
         console.log(a);
-        console.log(b);
-
 
         // Append the newly created table data to the table row
         // Create a new table row element
@@ -155,48 +134,26 @@ $(document).ready(function (){
                 $("<td>").text(frequency),
                 $("<td>").text(moment(nextTrain).format("MMM DD YYYY, hh:mm a")),
                 $("<td>").text(tMinutesTillTrain),
-                $("<td>").append(a),
-                $("<td>").append(b)
+                $("<td>").append(a)
         );
 
         // Append the table row to the table body
         $("#train-table > tbody").append(tRow);
 
-
-
         // This function handles events where one button is clicked
         // This is not working.
-        $("#buttons-view").on("click", function(event) {
+        $(".deleteTrain").on("click", function(event) {
 
             event.preventDefault();
 
-            alert("Delete!");
+            alert("Delete! " + id + " " + destination);
 
-            var deleteStuff = database.ref(id)
-            deleteStuff.remove();
-
-        });
-
-
-        // This function handles events where one button is clicked
-        // This is not working.
-        $("#buttons-view2").on("click", function(event) {
-
-            event.preventDefault();
-
-            alert("Editing " + trainName);
-
-            // YOUR TASK!!!
-            // Code in the logic for storing and retrieving the most recent user.
-            
-            // Retrieve new posts as they are added to our database
-            database.ref("train").on("child_added", function(snapshot) {
-                var newPost = snapshot.val();
-                console.log("Train Name to Edit " + newPost.trainName);
-            });
-            
+            var deleteStuff = database.ref(id);
+            //deleteStuff.remove();
+            console.log(deleteStuff);
 
         });
+     
 
 
     // Handle the errors
@@ -206,4 +163,5 @@ $(document).ready(function (){
     });
 
 });
+
 
