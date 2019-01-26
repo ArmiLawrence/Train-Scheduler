@@ -107,6 +107,8 @@ $(document).ready(function (){
         // (this is necessary otherwise you will have repeat buttons)
         $("#buttons-view").empty();
 
+        $("#buttons-view").attr(childSnapshot.val());
+
         // Then dynamically generating buttons for each train in the database
         // This code $("<button>") is all jQuery needs to create the beginning and end tag. (<button></button>)
         var a = $("<button>");
@@ -148,10 +150,7 @@ $(document).ready(function (){
 
             alert("Delete! " + id + " " + destination);
 
-            var deleteStuff = database.ref(id);
-            //deleteStuff.remove();
-            console.log(deleteStuff);
-
+            database.ref($(this).attr("data-name")).remove();
         });
      
 

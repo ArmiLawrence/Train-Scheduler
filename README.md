@@ -14,6 +14,6 @@
 
 2. Submit Button allows inserting records into the Firebase database (CR)
 
-3. Delete Button is added - however, it does not work well. It deletes the record pressed, but it also deletes records after the record pressed. (Example, if 4th record is clicked for deletion, 5th, 6th, so on record is deleted also). (D)
+3. Delete Button is added and can delete records from the Firebase database (D).
 
-4. Update Button not added. I could not get the Delete to work, therefore, updating was a bit too hard. (U)
+4. Future release will include an Update Button, which will have the ability to update records from the Firebase database (U).
