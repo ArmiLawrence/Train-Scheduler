@@ -148,8 +148,6 @@ $(document).ready(function (){
 
             event.preventDefault();
 
-            alert("Delete! " + id + " " + destination);
-
             database.ref($(this).attr("data-name")).remove();
         });
      
