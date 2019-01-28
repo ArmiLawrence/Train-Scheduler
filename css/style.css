@@ -2,5 +2,5 @@
 /* Body of the Page - all htmls*/
 
 html, body {
-    background-color: steelblue;
+    background-image: url("../images/train.jpg");
 }

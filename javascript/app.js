@@ -115,7 +115,7 @@ $(document).ready(function (){
         // Adding a class of update to our record
         a.addClass("deleteTrain");
         // Adding the bootstrap button
-        a.addClass("btn btn-primary");
+        a.addClass("btn btn-secondary");
         // Add the key as a data-attribute
         a.attr("data-name", id)
         // Providing the initial button text
